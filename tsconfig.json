@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "moduleResolution": "node",
+      "strict": true,
+      "jsx": "preserve",
+      "importHelpers": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["resources/ts/*"]
+      }
+    },
+    "include": [
+      "resources/ts/**/*.ts",
+      "resources/ts/**/*.tsx",
+      "resources/ts/**/*.vue",
+      "resources/js/**/*.ts",
+      "resources/js/**/*.tsx"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
