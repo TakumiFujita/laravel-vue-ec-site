@@ -1,18 +1,19 @@
 <template>
     <div id="app">
-      <h1>Hello Vue 3 + TypeScript + Laravel + Vite!</h1>
+      <!-- <h1>Hello Vue 3 + TypeScript + Laravel + Vite!</h1> -->
+      <router-view></router-view>
     </div>
-  </template>
+</template>
 
-  <script lang="ts">
+<script lang="ts">
   import { defineComponent } from 'vue';
 
   export default defineComponent({
     name: 'App'
   });
-  </script>
+</script>
 
-  <style scoped>
+<style scoped>
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -21,4 +22,4 @@
     color: #2c3e50;
     margin-top: 60px;
   }
-  </style>
+</style>
