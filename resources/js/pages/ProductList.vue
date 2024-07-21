@@ -1,15 +1,6 @@
 <template>
     <div>
         <h1>商品一覧</h1>
-        <div class="text-center text-orange-500">Tailwind CSS is working!</div>
-        <ul>
-            <li v-for="product in products" :key="product.id">
-                {{ product.name }}
-                ¥{{ product.price }}
-                {{ product.description }}
-                {{ product.image_path }}
-            </li>
-        </ul>
         <div class="bg-white">
             <div
                 class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
@@ -19,10 +10,13 @@
                 <div
                     class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                 >
-                    <a
+                    <router-link
                         v-for="product in products"
                         :key="product.id"
-                        :href="product.href"
+                        :to="{
+                            name: 'product-detail',
+                            params: { id: product.id },
+                        }"
                         class="group"
                     >
                         <div
@@ -38,9 +32,9 @@
                             {{ product.name }}
                         </h3>
                         <p class="mt-1 text-lg font-medium text-gray-900">
-                            {{ product.price }}
+                            ¥{{ product.price }}
                         </p>
-                    </a>
+                    </router-link>
                 </div>
             </div>
         </div>

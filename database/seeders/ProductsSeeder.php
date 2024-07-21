@@ -17,7 +17,7 @@ class ProductsSeeder extends Seeder
             [
                 'name' => 'Product1',
                 'description' => 'Description for product1',
-                'image_path' => 'path/to/image1.jpg',
+                'image_path' => 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
                 'stock_quantity' => 10,
                 'price' => 1000,
                 'created_at' => now(),
@@ -26,7 +26,7 @@ class ProductsSeeder extends Seeder
             [
                 'name' => 'Product2',
                 'description' => 'Description for product2',
-                'image_path' => 'path/to/image2.jpg',
+                'image_path' => 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
                 'stock_quantity' => 20,
                 'price' => 2000,
                 'created_at' => now(),
@@ -35,7 +35,7 @@ class ProductsSeeder extends Seeder
             [
                 'name' => 'Product3',
                 'description' => 'Description for product3',
-                'image_path' => 'path/to/image3.jpg',
+                'image_path' => 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
                 'stock_quantity' => 30,
                 'price' => 3000,
                 'created_at' => now(),
@@ -44,18 +44,9 @@ class ProductsSeeder extends Seeder
             [
                 'name' => 'Product4',
                 'description' => 'Description for product4',
-                'image_path' => 'path/to/image4.jpg',
+                'image_path' => 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
                 'stock_quantity' => 40,
                 'price' => 4000,
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'name' => 'Product5',
-                'description' => 'Description for product5',
-                'image_path' => 'path/to/image5.jpg',
-                'stock_quantity' => 50,
-                'price' => 5000,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

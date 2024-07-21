@@ -12,4 +12,21 @@ class ProductController extends Controller
         $products = Product::all();
         return response()->json($products);
     }
+
+    // public function show()
+    // {
+    //     $product = Product::all();
+    //     return response()->json($product);
+    // }
+
+    public function show($id)
+    {
+        $product = Product::find($id);
+        // dd($product);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json($product);
+    }
 }
