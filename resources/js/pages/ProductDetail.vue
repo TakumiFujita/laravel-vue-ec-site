@@ -1,6 +1,7 @@
 <template>
     <div v-if="loading" class="text-center">Loading...</div>
     <div v-else-if="product" class="bg-white">
+        <h1>商品詳細</h1>
         <div class="pt-6">
             <!-- パンくず -->
             <!-- <nav aria-label="Breadcrumb">
