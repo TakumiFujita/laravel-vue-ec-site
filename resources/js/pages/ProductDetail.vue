@@ -1,7 +1,6 @@
 <template>
     <div v-if="loading" class="text-center">Loading...</div>
     <div v-else-if="product" class="bg-white">
-        <h1>商品詳細</h1>
         <div class="pt-6">
             <!-- パンくず -->
             <!-- <nav aria-label="Breadcrumb">
@@ -136,7 +135,7 @@
                         </div>
                     </div>
 
-                    <form class="mt-10">
+                    <form class="mt-10" @submit.prevent="addToCart">
                         <!-- Colors -->
                         <div>
                             <!-- <h3 class="text-sm font-medium text-gray-900">
@@ -324,7 +323,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import router from "../router";
 // import { StarIcon } from "@heroicons/vue/20/solid";
 // import { RadioGroup, RadioGroupOption } from "@headlessui/vue";
 
@@ -395,18 +395,78 @@ onMounted(async () => {
     try {
         const id = route.params.id as string;
         const response = await fetch(`/productDetail/${id}`); // 修正: URLをAPIエンドポイントに合わせる
-        console.log(`response: ${response}`);
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log(`data: ${data}`);
         product.value = data; // 適切なプロダクトデータに変更
     } catch (error) {
-        console.log("エラー");
         console.error("Failed to fetch product data:", error);
     } finally {
         loading.value = false; // データ取得が完了したらローディングを終了
     }
 });
+
+const addToCart = () => {
+    if (!product.value) return;
+    console.log("try前");
+    try {
+        // カート情報をデータベースに保存するリクエストを送信
+        console.log("try内");
+        axios.post(`/cart/${product.value.id}`);
+
+        // カートページにリダイレクト
+        router.push({ name: "cart" });
+    } catch (error) {
+        console.log("error内");
+        console.error("Failed to add product to cart:", error);
+    }
+};
+
+// const addToCart = async () => {
+//     if (!product.value) return;
+//     console.log("try前");
+//     try {
+//         // カート情報をデータベースに保存するリクエストを送信
+//         console.log("try内");
+//         await axios.post(`/cart/${product.value.id}`, {
+//             product_id: product.value.id,
+//         });
+
+//         // カートページにリダイレクト
+//         router.push({ name: "cart" });
+//     } catch (error) {
+//         console.log("error内");
+//         console.error("Failed to add product to cart:", error);
+//     }
+// };
+
+// async function addToCart() {
+//     if (product.value) {
+//         try {
+//             await axios.post(
+//                 "/cart",
+//                 {
+//                     productId: product.value.id,
+//                     productName: product.value.name,
+//                     productPrice: product.value.price,
+//                     productImage: product.value.image_path,
+//                 },
+//                 {
+//                     headers: {
+//                         "X-CSRF-TOKEN":
+//                             document
+//                                 .querySelector('meta[name="csrf-token"]')
+//                                 ?.getAttribute("content") || "",
+//                     },
+//                 }
+//             );
+
+//             // カートページに遷移
+//             router.push({ name: "cart" });
+//         } catch (error) {
+//             console.error("Failed to add to cart:", error);
+//         }
+//     }
+// }
 </script>
