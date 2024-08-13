@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-gray-100 {
+  background-color: transparent !important;
+}
+/*
+.bg-indigo-600 {
+  background-color: #4c51bf !important;
+} */
