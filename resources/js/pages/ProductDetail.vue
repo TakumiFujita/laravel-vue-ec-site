@@ -413,10 +413,20 @@ const addToCart = () => {
     try {
         // カート情報をデータベースに保存するリクエストを送信
         console.log("try内");
-        axios.post(`/cart/${product.value.id}`);
+        console.log(`product.value.id:${product.value.id}`);
+        // axios.post(`/cart/${product.value.id}`);
+        axios
+            .post(`/cart/${product.value.id}`)
+            .then((response) => {
+                console.log("成功:", response);
+                router.push({ name: "cart" });
+            })
+            .catch((error) => {
+                console.error("エラー:", error);
+            });
 
         // カートページにリダイレクト
-        router.push({ name: "cart" });
+        // router.push({ name: "cart" });
     } catch (error) {
         console.log("error内");
         console.error("Failed to add product to cart:", error);

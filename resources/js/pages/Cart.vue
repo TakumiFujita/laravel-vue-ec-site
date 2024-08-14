@@ -52,7 +52,7 @@
                 <div class="flow-root">
                     <ul role="list" class="-my-6 divide-y divide-gray-200">
                         <li
-                            v-for="product in products"
+                            v-for="product in cartItems"
                             :key="product.id"
                             class="flex py-6"
                         >
@@ -76,13 +76,11 @@
                                                 product.name
                                             }}</a>
                                         </h3>
-                                        <p class="ml-4">
-                                            {{ product.price }}
-                                        </p>
+                                        <p class="ml-4">¥{{ product.price }}</p>
                                     </div>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <!-- <p class="mt-1 text-sm text-gray-500">
                                         {{ product.color }}
-                                    </p>
+                                    </p> -->
                                 </div>
                                 <div
                                     class="flex flex-1 items-end justify-between text-sm"
@@ -97,7 +95,7 @@
                                             type="button"
                                             class="font-medium text-indigo-600 hover:text-indigo-500"
                                         >
-                                            Remove
+                                            削除
                                         </button>
                                     </div>
                                 </div>
@@ -112,8 +110,8 @@
             <div
                 class="flex justify-between text-base font-medium text-gray-900"
             >
-                <p>Subtotal</p>
-                <p>$262.00</p>
+                <p>小計</p>
+                <p>¥{{ totalPrice }}</p>
             </div>
             <p class="mt-0.5 text-sm text-gray-500">
                 Shipping and taxes calculated at checkout.
@@ -152,7 +150,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
+import axios from "axios";
 import {
     Dialog,
     DialogPanel,
@@ -162,37 +161,74 @@ import {
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
-const products = [
-    {
-        id: 1,
-        name: "Throwback Hip Bag",
-        href: "#",
-        color: "Salmon",
-        price: "$90.00",
-        quantity: 1,
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-        imageAlt:
-            "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-    },
-    {
-        id: 2,
-        name: "Medium Stuff Satchel",
-        href: "#",
-        color: "Blue",
-        price: "$32.00",
-        quantity: 1,
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-        imageAlt:
-            "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-    },
-    // More products...
-];
+// const products = [
+//     {
+//         id: 1,
+//         name: "Throwback Hip Bag",
+//         href: "#",
+//         color: "Salmon",
+//         price: "$90.00",
+//         quantity: 1,
+//         imageSrc:
+//             "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
+//         imageAlt:
+//             "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
+//     },
+//     {
+//         id: 2,
+//         name: "Medium Stuff Satchel",
+//         href: "#",
+//         color: "Blue",
+//         price: "$32.00",
+//         quantity: 1,
+//         imageSrc:
+//             "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
+//         imageAlt:
+//             "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
+//     },
+// ];
 const open = ref(true);
+
+// カートアイテムの配列を作成
+const cartItems = ref([]);
+
+// カートアイテムを取得する関数
+const fetchCartItems = async () => {
+    try {
+        console.log("before if");
+        const response = await axios.get("/cart"); // カート情報を取得するエンドポイント
+        console.log("response.data:", JSON.stringify(response.data, null, 2));
+        // if (response.data.status === "success") {
+        //     console.log("success");
+        //     cartItems.value = response.data.cartItems;
+        //     console.log(cartItems.value);
+        // }
+        cartItems.value = response.data.map((item) => ({
+            id: item.id,
+            name: item.product.name,
+            price: parseFloat(item.product.price),
+            imageSrc: item.product.image_path,
+            imageAlt: item.product.name,
+            quantity: 1, // 必要に応じて適切な数量を設定
+        }));
+    } catch (error) {
+        console.error("Error fetching cart items:", error);
+    }
+};
+
+const totalPrice = computed(() => {
+    return cartItems.value.reduce((total, item) => {
+        return total + item.price;
+    }, 0);
+});
+
+// コンポーネントがマウントされたときにカートアイテムを取得
+onMounted(() => {
+    fetchCartItems();
+    console.log("after fetchCartItems");
+});
 
 // 確認用に Vue インスタンスの存在をコンソールに出力
 // console.log("Vue instance:", Vue);
 console.log("open:", open.value);
-console.log("products:", products);
 </script>

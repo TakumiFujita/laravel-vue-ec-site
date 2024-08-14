@@ -9,6 +9,7 @@ require __DIR__ . '/auth.php';
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/productDetail/{id}', [ProductController::class, 'show']);
+Route::get('/cart/', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
 
 Route::get('/dashboard', function () {
