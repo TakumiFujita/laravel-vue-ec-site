@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::find($id);
+        $product = Product::with('categories')->find($id);
         // dd($product);
         if (!$product) {
             return response()->json(['error' => 'Product not found'], 404);

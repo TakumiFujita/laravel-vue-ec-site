@@ -182,16 +182,23 @@
 
                         <!-- Sizes -->
                         <div class="mt-10">
-                            <!-- <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-medium text-gray-900">
-                                    Size
+                                    <ul>
+                                        <li
+                                            v-for="category in product.categories"
+                                            :key="category.id"
+                                        >
+                                            {{ category.name }}
+                                        </li>
+                                    </ul>
                                 </h3>
                                 <a
                                     href="#"
                                     class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
                                     >Size guide</a
                                 >
-                            </div> -->
+                            </div>
 
                             <!-- <fieldset aria-label="Choose a size" class="mt-4">
                                 <RadioGroup
