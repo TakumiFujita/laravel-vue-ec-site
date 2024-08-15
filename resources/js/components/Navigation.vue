@@ -25,6 +25,15 @@
                         </router-link>
                     </div>
                 </div>
+                <!-- <span class="material-symbols-outlined"> shopping_cart </span> -->
+                <!-- アイコンの部分 -->
+                <router-link to="/cart" class="cart-icon">
+                    <span class="material-symbols-outlined">
+                        shopping_cart
+                    </span>
+                    <span class="cart-badge">3</span>
+                    <!-- 商品数を表示するバッジ -->
+                </router-link>
 
                 <!-- Settings Dropdown -->
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -202,5 +211,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* 必要に応じてスタイルを追加 */
+.cart-icon {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-right: 20px; /* 右側に余白を追加 */
+}
 </style>
