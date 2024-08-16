@@ -94,6 +94,7 @@
                                         <button
                                             type="button"
                                             class="font-medium text-indigo-600 hover:text-indigo-500"
+                                            @click="removeItem(product.id)"
                                         >
                                             削除
                                         </button>
@@ -213,6 +214,19 @@ const fetchCartItems = async () => {
         }));
     } catch (error) {
         console.error("Error fetching cart items:", error);
+    }
+};
+
+// 商品削除処理
+const removeItem = async (productId) => {
+    try {
+        await axios.delete(`/cart/${productId}`);
+        // 削除後にcartItemsから削除された商品を取り除く
+        cartItems.value = cartItems.value.filter(
+            (item) => item.id !== productId
+        );
+    } catch (error) {
+        console.error("Error removing item from cart:", error);
     }
 };
 

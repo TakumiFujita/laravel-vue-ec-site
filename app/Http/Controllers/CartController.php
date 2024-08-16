@@ -55,10 +55,16 @@ class CartController extends Controller
         return response()->json(['status' => 'error', 'message' => 'User not logged in'], 401);
     }
 
-    // private function getCartItems($userId)
-    // {
-    //     return Cart::where('user_id', $userId)
-    //         ->with('product')
-    //         ->get();
-    // }
+    public function destroy($id)
+    {
+        Log::info("Deleting item with ID: {$id}");
+        $cartItem = Cart::find($id);
+
+        if (!$cartItem) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+
+        $cartItem->delete();
+        return response()->json(['message' => 'Item deleted successfully']);
+    }
 }
