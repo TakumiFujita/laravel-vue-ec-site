@@ -31,7 +31,7 @@
                     <span class="material-symbols-outlined">
                         shopping_cart
                     </span>
-                    <span class="cart-badge">3</span>
+                    <span class="cart-badge">{{ cartCount }}</span>
                     <!-- 商品数を表示するバッジ -->
                 </router-link>
 
@@ -156,26 +156,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
     name: "Navigation",
     setup() {
         const open = ref(false);
         const user = ref(window.authUser || null);
-        onMounted(() => {
-            console.log("User data:", user.value);
-        });
-        // const user = ref(null);
+        const cartCount = ref(0);
 
-        // const fetchUser = async () => {
-        //     try {
-        //         const response = await fetch("/api/user");
-        //         user.value = await response.json();
-        //     } catch (error) {
-        //         console.error("Error fetching user:", error);
-        //     }
-        // };
+        onMounted(async () => {
+            try {
+                const response = await fetch("/cart/count");
+                // console.log("Response Status:", response);
+                const data = await response.json();
+                // console.log(
+                //     "Fetched Cart Count Data:",
+                //     JSON.stringify(data, null, 2)
+                // );
+                cartCount.value = data.count;
+                console.log(`Updated Cart Count: ${cartCount.value}`);
+            } catch (error) {
+                console.error("Error fetching cart count:", error);
+            }
+        });
 
         const logout = async () => {
             try {
@@ -204,6 +208,7 @@ export default defineComponent({
         return {
             open,
             user,
+            cartCount,
             logout,
         };
     },

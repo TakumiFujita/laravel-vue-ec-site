@@ -12,6 +12,7 @@ Route::get('/productDetail/{id}', [ProductController::class, 'show']);
 Route::get('/cart/', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.delete');
+Route::get('/cart/count', [CartController::class, 'getCartItemCount']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

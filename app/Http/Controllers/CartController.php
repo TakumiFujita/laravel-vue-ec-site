@@ -67,4 +67,14 @@ class CartController extends Controller
         $cartItem->delete();
         return response()->json(['message' => 'Item deleted successfully']);
     }
+
+    public function getCartItemCount()
+    {
+        $userId = auth()->id();
+        if ($userId) {
+            $cartCount = Cart::where('user_id', $userId)->count();
+            return response()->json(['count' => $cartCount]);
+        }
+        return response()->json(['count' => 0]);
+    }
 }
