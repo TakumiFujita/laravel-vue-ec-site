@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 
@@ -13,6 +14,7 @@ Route::get('/cart/', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.delete');
 Route::get('/cart/count', [CartController::class, 'getCartItemCount']);
+Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

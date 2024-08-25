@@ -118,27 +118,14 @@
                 Shipping and taxes calculated at checkout.
             </p>
             <div class="mt-6">
-                <a
-                    href="#"
-                    class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                    >購入手続きへ</a
+                <button
+                    @click="checkout"
+                    class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                 >
+                    購入手続きへ
+                </button>
             </div>
-            <div
-                class="mt-6 flex justify-center text-center text-sm text-gray-500"
-            >
-                <p>
-                    or{{ " " }}
-                    <button
-                        type="button"
-                        class="font-medium text-indigo-600 hover:text-indigo-500"
-                        @click="open = false"
-                    >
-                        買い物を続ける
-                        <span aria-hidden="true"> &rarr;</span>
-                    </button>
-                </p>
-            </div>
+            <ContinueShoppingButton />
         </div>
     </div>
     <!-- </DialogPanel> -->
@@ -152,7 +139,9 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
+import { loadStripe } from "@stripe/stripe-js";
 import {
     Dialog,
     DialogPanel,
@@ -161,6 +150,7 @@ import {
     TransitionRoot,
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+import ContinueShoppingButton from "../components/ContinueShoppingButton.vue";
 
 // const products = [
 //     {
@@ -241,6 +231,32 @@ onMounted(() => {
     fetchCartItems();
     console.log("after fetchCartItems");
 });
+
+// 環境変数から公開キーを取得
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
+// チェックアウト処理を定義
+const checkout = async () => {
+    try {
+        // Stripeの公開キーを使ってインスタンスを作成
+        const stripe = await loadStripe(stripePublicKey);
+
+        // バックエンドのチェックアウトエンドポイントにリクエストを送信
+        const response = await axios.post("/checkout");
+
+        // バックエンドから返されたセッションIDを使ってStripeの決済ページにリダイレクト
+        const { id } = response.data;
+        const { error } = await stripe.redirectToCheckout({
+            sessionId: id,
+        });
+
+        if (error) {
+            console.error("Error redirecting to checkout:", error);
+        }
+    } catch (error) {
+        console.error("Error creating checkout session:", error);
+    }
+};
 
 // 確認用に Vue インスタンスの存在をコンソールに出力
 // console.log("Vue instance:", Vue);
