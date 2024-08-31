@@ -329,6 +329,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useStore } from "vuex";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import router from "../router";
@@ -392,6 +393,7 @@ interface Product {
 const reviews = { href: "#", average: 4, totalCount: 117 };
 const product = ref<Product | null>(null);
 const loading = ref(true);
+const store = useStore();
 const route = useRoute();
 // const selectedColor = ref(product.colors[0]);
 // const selectedSize = ref(product.sizes[2]);
@@ -414,10 +416,13 @@ onMounted(async () => {
     }
 });
 
-const addToCart = () => {
+const addToCart = async () => {
     if (!product.value) return;
     console.log("try前");
+    const quantity = 1;
     try {
+        await store.dispatch("addToCart", quantity);
+
         // カート情報をデータベースに保存するリクエストを送信
         console.log("try内");
         console.log(`product.value.id:${product.value.id}`);

@@ -139,6 +139,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
@@ -179,7 +180,7 @@ import ContinueShoppingButton from "../components/ContinueShoppingButton.vue";
 //     },
 // ];
 const open = ref(true);
-
+const store = useStore();
 // カートアイテムの配列を作成
 const cartItems = ref([]);
 
@@ -209,12 +210,18 @@ const fetchCartItems = async () => {
 
 // 商品削除処理
 const removeItem = async (productId) => {
+    const quantity = 1;
     try {
         await axios.delete(`/cart/${productId}`);
         // 削除後にcartItemsから削除された商品を取り除く
         cartItems.value = cartItems.value.filter(
             (item) => item.id !== productId
         );
+
+        console.log("Item removed from cart:", productId);
+        console.log("Before dispatching removeFromCart, quantity:", quantity);
+        await store.dispatch("removeFromCart", quantity);
+        console.log("After dispatching removeFromCart");
     } catch (error) {
         console.error("Error removing item from cart:", error);
     }

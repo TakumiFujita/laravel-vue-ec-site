@@ -156,26 +156,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
     name: "Navigation",
     setup() {
         const open = ref(false);
         const user = ref(window.authUser || null);
-        const cartCount = ref(0);
+        // const cartCount = ref(0);
+        const store = useStore();
+        const cartCount = computed(() => store.getters.cartCount);
 
         onMounted(async () => {
             try {
                 const response = await fetch("/cart/count");
-                // console.log("Response Status:", response);
                 const data = await response.json();
-                // console.log(
-                //     "Fetched Cart Count Data:",
-                //     JSON.stringify(data, null, 2)
-                // );
-                cartCount.value = data.count;
-                console.log(`Updated Cart Count: ${cartCount.value}`);
+
+                // cartCount.value = data.count;
+                // console.log(`Updated Cart Count: ${cartCount.value}`);
             } catch (error) {
                 console.error("Error fetching cart count:", error);
             }
