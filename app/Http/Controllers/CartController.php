@@ -77,4 +77,21 @@ class CartController extends Controller
         }
         return response()->json(['count' => 0]);
     }
+
+    public function clearCart()
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            Log::error('User not authenticated');
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+        try {
+            Cart::where('user_id', $userId)->delete();
+            Log::info('Cart cleared for user ID: ' . $userId);
+            return response()->json(['message' => 'Cart cleared successfully.']);
+        } catch (\Exception $e) {
+            Log::error('Error clearing cart: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to clear cart'], 500);
+        }
+    }
 }

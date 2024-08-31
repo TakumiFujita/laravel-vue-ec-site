@@ -15,6 +15,7 @@ Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add'
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.delete');
 Route::get('/cart/count', [CartController::class, 'getCartItemCount']);
 Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
+Route::delete('/clear-cart', [CartController::class, 'clearCart'])->name('clearCart');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
