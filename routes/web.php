@@ -12,6 +12,7 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/productDetail/{id}', [ProductController::class, 'show']);
 Route::get('/cart/', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.delete');
 Route::get('/cart/count', [CartController::class, 'getCartItemCount']);
 Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');

@@ -172,9 +172,7 @@ export default defineComponent({
             try {
                 const response = await fetch("/cart/count");
                 const data = await response.json();
-
-                // cartCount.value = data.count;
-                // console.log(`Updated Cart Count: ${cartCount.value}`);
+                store.commit("SET_CART_COUNT", data.count);
             } catch (error) {
                 console.error("Error fetching cart count:", error);
             }

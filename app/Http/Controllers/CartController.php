@@ -25,33 +25,33 @@ class CartController extends Controller
     }
 
 
-    public function addToCart($id)
+    public function addToCart(Request $request, $id)
     {
-        Log::info('addToCart method called with id: ' . $id);
-        // dd($id);
-        // $productId = $request->input('product_id');
-        $quantity = 1;
+        $quantity = $request->input('quantity', 1);
+
 
         // ユーザーがログインしているか確認
         if (Auth::check()) {
             $userId = Auth::id();
 
+            // カートアイテムをデータベースで検索
+            $cartItem = Cart::where('user_id', $userId)->where('product_id', $id)->first();
 
-            // カートアイテムをデータベースに保存
-            $cartItem = Cart::updateOrCreate(
-                ['user_id' => $userId, 'product_id' => $id],
-                ['quantity' => $quantity]
-            );
-            // Log::info('Cart Item: ' . print_r($cartItem, true));
-            Log::info('in auth check');
-
-            // $cartItems = $this->getCartItems($userId);
-
-            // return response()->json(['status' => 'success', 'cartItems' => $cartItems]);
+            if ($cartItem) {
+                // 既存のカートアイテムが存在する場合、数量を追加
+                $cartItem->quantity += $quantity;
+                $cartItem->save();
+            } else {
+                // カートアイテムが存在しない場合、新規作成
+                Cart::create([
+                    'user_id' => $userId,
+                    'product_id' => $id,
+                    'quantity' => $quantity,
+                ]);
+            }
             return redirect()->route('cart.index');
         }
 
-        Log::info('before return');
         return response()->json(['status' => 'error', 'message' => 'User not logged in'], 401);
     }
 
@@ -72,11 +72,34 @@ class CartController extends Controller
     {
         $userId = auth()->id();
         if ($userId) {
-            $cartCount = Cart::where('user_id', $userId)->count();
-            return response()->json(['count' => $cartCount]);
+            // distinct を使って、user_id でグループ化し、product_id をユニークにカウント
+            $uniqueItemCount = Cart::where('user_id', $userId)
+                ->distinct('product_id')
+                ->count('product_id');
+            Log::info("$uniqueItemCount, {$uniqueItemCount}");
+            return response()->json(['count' => $uniqueItemCount]);
         }
         return response()->json(['count' => 0]);
     }
+
+    public function update(Request $request, $id)
+    {
+        // バリデーション
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        // カート内の数量を更新
+        $cartItem = Cart::where('id', $id)->first();
+        if ($cartItem) {
+            $cartItem->quantity = $request->input('quantity');
+            $cartItem->save();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+    }
+
 
     public function clearCart()
     {
